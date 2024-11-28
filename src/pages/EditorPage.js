@@ -1,5 +1,8 @@
 import React, {useState} from 'react';
 import Client from '../components/Client.js';
+import Editor from '../components/Editor.js';
+// import {Logo} from '../public/Logo';
+
 
 const EditorPage = ()=>{
 
@@ -19,7 +22,8 @@ const EditorPage = ()=>{
                 <div className='left-inner'>
 
                     <div className='logo'>
-                         <img className='logoImg' src=''  />
+                         <img className='logoImg'  src="Logo.PNG"
+                    alt="logo"/>
                     </div>
 
                     <h3>Connected</h3>
@@ -49,7 +53,7 @@ const EditorPage = ()=>{
 
             <div className='right'>
 
-                {/* <Editor></Editor> */}
+                 <Editor></Editor> 
                   
             </div>
 
