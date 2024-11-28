@@ -1,70 +1,52 @@
-# Getting Started with Create React App
+# *CollaborativeCodeEditor*
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to the *Real-Time Coding Platform, a collaborative coding environment designed for solving **Data Structures and Algorithms (DSA)*  problems and *competitive programming challenges*.
 
-## Available Scripts
+This platform allows multiple programmers to contribute to a shared codebase, see each other's changes in real-time, and enhance their problem-solving skills through teamwork.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## *Features*
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 👩‍💻 *Real-Time Collaboration*
+- Multiple users can code together on the same problem simultaneously.
+- Instant updates for all users whenever changes are made.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 🚀 *Competitive Programming*
+- Virtual contests to simulate real competitive programming environments.
+- Leaderboards to track progress and encourage healthy competition.
 
-### `npm test`
+### 🔧 *Integrated Tools*
+- Code editor with syntax highlighting, auto-completion, and error detection.
+- Multi-language support (C++, Java, Python, etc.).
+- Compile and run directly within the platform.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 📈 *Analytics and Progress Tracking*
+- Detailed performance statistics for each user.
+- Insights on problem-solving speed, accuracy, and coding patterns.
 
-### `npm run build`
+### 📈 *Real time Chatting*
+- You can chat with collaborators in real time.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 🔐 *Secure and Reliable*
+- User authentication to ensure secure collaboration.
+- Real-time data synchronization powered by robust backend services.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## *Tech Stack*
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 💻 *Frontend*
+- *React.js*: For creating a dynamic and responsive user interface.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### 🖧 *Backend*
+- *Node.js + Express.js*: To handle API requests and manage server-side logic.
+- *Socket.IO*: For enabling real-time collaboration and communication.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 🗄 *Database*
+- *MongoDB*: For storing user data, problems, and progress history.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### 🌐 *Deployment*
+- *AWS EC2 and S3*: To host the platform and manage file uploads.
