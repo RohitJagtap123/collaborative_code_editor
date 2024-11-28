@@ -1,0 +1,94 @@
+.homePageWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    height: 100vh;
+}
+
+.formWrapper {
+    background: #282a36;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+    text-align: center; /* Center-align logo and content */
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+}
+
+footer a {
+    color: #4aee88;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Horizontally center items */
+    justify-content: center; /* Vertically center items */
+}
+
+.mainLabel {
+    margin-bottom: 20px;
+    margin-top: 0;
+}
+
+.homePageLogo {
+    height: 80px;
+    margin: 0 auto 30px; /* Center the logo */
+    display: block;
+}
+
+.inputBox {
+    padding: 10px;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    margin-bottom: 14px;
+    background: #eee;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%; /* Makes input boxes full-width */
+}
+
+.btn {
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.joinBtn {
+    background: #4aed88;
+    width: 120px; /* Adjust button width */
+    margin: 10px auto; /* Center the button */
+    text-align: center;
+}
+
+.joinBtn:hover {
+    background: #2b824c;
+}
+
+.createInfo {
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+.createNewBtn {
+    color: #4aed88;
+    text-decoration: none;
+    border-bottom: 1px solid #4aed88;
+    transition: all 0.3s ease-in-out;
+}
+
+.createNewBtn:hover,
+footer a:hover {
+    color: #368654;
+    border-color: #368654;
+}
