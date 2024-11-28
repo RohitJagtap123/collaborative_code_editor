@@ -1,11 +1,31 @@
-import logo from './logo.svg';
+import { BrowserRouter } from 'react-router-dom';
 import './App.css';
-import Home from './pages/Home.js';
+import { BrowserRouter,Routes,Route } from 'react-router-dom';
+import EditorPage from './pages/EditorPage';
+import Home from './pages/Home'; 
 function App() {
   return (
-    <div className="App">
-      <Home/>
-    </div>
+     <>
+     <BrowserRouter>
+
+         
+         <Routes>
+
+             <Route path="/" element={<Home/>}></Route>
+             <Route path="/editor/:roomId" element={<EditorPage/>}></Route>
+
+
+         </Routes>
+     
+     
+     
+     
+     </BrowserRouter>
+     
+     
+     
+     
+     </>
   );
 }
 
