@@ -1,3 +1,4 @@
+/* home-page CSS */
 .homePageWrapper {
     display: flex;
     align-items: center;
@@ -64,14 +65,14 @@ footer a {
     transition: all 0.3s ease-in-out;
 }
 
-.joinBtn {
+.joinBtn{
     background: #4aed88;
     width: 120px; /* Adjust button width */
     margin: 10px auto; /* Center the button */
     text-align: center;
 }
 
-.joinBtn:hover {
+.joinBtn:hover , .leavebtn:hover {
     background: #2b824c;
 }
 
@@ -91,4 +92,124 @@ footer a {
 footer a:hover {
     color: #368654;
     border-color: #368654;
+}
+
+/*Editor-page CSS*/
+
+.Main{
+    display:grid;
+    grid-template-columns: 230px 1fr;   /*230 for left and 1fr==remaining*/
+    height:100vh;
+    overflow: hidden;
+}
+
+.left{
+    background:#1c1e29;
+    padding:16px;
+    color:#fff;
+    display:flex;
+    flex-direction:column;
+}
+
+.left-inner{
+  flex:1
+}
+
+.client-list{
+    display:flex;
+    align-items:center;
+    flex-wrap: wrap;
+    gap:20px;
+}
+
+.client{
+    display:flex;
+    align-items:center;
+    flex-direction:column;
+    font-weight: bold;
+}
+
+.username{
+    margin-top:10px;
+}
+.logo{
+    border-bottom:1px solid #424242;
+    padding-bottom: 10px;
+}
+
+.logoImg{
+    height:60px;
+
+}
+
+/* .leavebtn{
+    margin-top: 20px;
+    padding:10px;
+    width:100%;
+    background: #4aed88;
+}
+
+.copybtn{
+    margin-top: 20px;
+    padding:10px;
+    width:100%;
+
+} */
+
+
+.leavebtn, .copybtn {
+    display: block; /* Ensures buttons are stacked vertically */
+    width: 100%;    /* Full width of the container */
+    padding: 12px 20px; /* Increases padding for a more prominent look */
+    margin-top: 20px;   /* Space between buttons */
+    font-size: 16px;    /* Larger text for better readability */
+    font-weight: bold;  /* Makes the text bold */
+    border-radius: 8px; /* Adds rounded corners */
+    border: none;       /* Removes default border */
+    cursor: pointer;    /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+    font-weight:bold;
+}
+
+.leavebtn {
+    background: #4aed88; /* Original color */
+    color: white;        /* Text color for contrast */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.copybtn {
+    background: #007bff; /* Blue background */
+    color: white;        /* Text color for contrast */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Hover Effects */
+.leavebtn:hover {
+    background: #45c47c; /* Darker green for hover */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+}
+
+.copybtn:hover {
+    background: #0056b3; /* Darker blue for hover */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+}
+
+/* Active (clicked) Effects */
+.leavebtn:active, .copybtn:active {
+    transform: scale(0.98); /* Slight shrink effect */
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15); /* Reduce shadow on click */
+}
+
+
+
+.CodeMirror{
+/* min-height:calc(100vh-20px);
+font-size:20px;
+line-height:1.6;    
+padding-top:20px; */
+
+min-height: 100vh; /* Ensure it only takes full viewport height */
+height: calc(100vh - 20px); /* Adjust based on the layout */
+font-size: 20px; /* Avoid large font sizes that cause overflow */
+line-height: 1.6;
 }
