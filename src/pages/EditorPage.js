@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import toast from 'react-hot-toast';
+import '../App.css';
+
 import ACTIONS from '../Actions';
 import Client from '../components/Client';
 import Editor from '../components/Editor';
@@ -112,10 +114,10 @@ const EditorPage = () => {
                         ))}
                     </div>
                 </div>
-                <button className="btn copyBtn" onClick={copyRoomId}>
+                <button className="copybtn" onClick={copyRoomId}>
                     Copy ROOM ID
                 </button>
-                <button className="btn leaveBtn" onClick={leaveRoom}>
+                <button className="leavebtn" onClick={leaveRoom}>
                     Leave
                 </button>
             </div>
