@@ -100,6 +100,7 @@ footer a:hover {
     display:grid;
     grid-template-columns: 230px 1fr;   /*230 for left and 1fr==remaining*/
     height:100vh;
+    overflow: hidden;
 }
 
 .left{
@@ -167,6 +168,7 @@ footer a:hover {
     border: none;       /* Removes default border */
     cursor: pointer;    /* Pointer cursor on hover */
     transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+    font-weight:bold;
 }
 
 .leavebtn {
@@ -199,3 +201,15 @@ footer a:hover {
 }
 
 
+
+.CodeMirror{
+/* min-height:calc(100vh-20px);
+font-size:20px;
+line-height:1.6;    
+padding-top:20px; */
+
+min-height: 100vh; /* Ensure it only takes full viewport height */
+height: calc(100vh - 20px); /* Adjust based on the layout */
+font-size: 20px; /* Avoid large font sizes that cause overflow */
+line-height: 1.6;
+}
