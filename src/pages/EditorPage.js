@@ -9,7 +9,7 @@ import { useLocation, useNavigate, Navigate, useParams } from 'react-router-dom'
 
 const EditorPage = () => {
     const socketRef = useRef(null);
-    const codeRef = useRef('');
+    const codeRef = useRef(null);
     const location = useLocation();
     const { roomId } = useParams();
     const reactNavigator = useNavigate();

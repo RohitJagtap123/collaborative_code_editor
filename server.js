@@ -19,7 +19,8 @@ app.use(express.json());
 
 
 
-const JUDGE0_API_BASE_URL = "https://judge0-ce.p.rapidapi.com";
+const JUDGE0_API_BASE_URL = process.env.JUDGE0_API_BASE_URL || "https://judge0-ce.p.rapidapi.com";
+;
 const JUDGE0_API_KEY = process.env.JUDGE0_API_KEY; // Store your RapidAPI key in .env
 const JUDGE0_API_HOST = "judge0-ce.p.rapidapi.com"; // Judge0 API Host
 
@@ -159,15 +160,9 @@ io.on('connection', (socket) => {
 });
 
 
-// console.log("Submitting code to Judge0:", { language_id, source_code, stdin });
-// console.log("Token received from Judge0:", submissionResponse.data.token);
-
-
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
-// console.log("Submission Response:", submissionResponse.data);
-// console.log("Output Fetch Response:", result.data);
 
 
 
