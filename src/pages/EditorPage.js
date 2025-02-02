@@ -213,22 +213,7 @@ const EditorPage = () => {
                         {isLoading? 'Executing...' :'Execute'}
                     </button>
 
-                    {/* {isLoading ?(
-                        <div className="spinner"></div>
-                    ) :(
-
-
-                        {isOutputAreaVisible && (
-                        <div className="outputArea">
-                        <h3>Output:</h3>
-                        <pre>{output}</pre>
-                        </div>
-
-                        )}
-
-                    )
-                
-                    } */}
+                   
 
                     {isLoading ? (
                      <div className="spinner"></div>
