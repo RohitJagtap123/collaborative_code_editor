@@ -8,6 +8,7 @@ const Home = () => {
 
     const [roomId, setRoomId] = useState('');
     const [username, setUsername] = useState('');
+    
     const createNewRoom = (e) => {
         e.preventDefault();
         const id = uuidV4();
@@ -75,12 +76,12 @@ const Home = () => {
                     </span>
                 </div>
             </div>
-            <footer>
+            {/* <footer>
                 <h4>
                     Built by &nbsp;
                     <a href="https://github.com/RohitJagtap123">Rohit Jagtap</a>
                 </h4>
-            </footer>
+            </footer> */}
         </div>
     );
 };

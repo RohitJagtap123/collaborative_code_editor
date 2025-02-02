@@ -9,7 +9,7 @@ import { useLocation, useNavigate, Navigate, useParams } from 'react-router-dom'
 
 const EditorPage = () => {
     const socketRef = useRef(null);
-    const codeRef = useRef('');
+    const codeRef = useRef(null);
     const location = useLocation();
     const { roomId } = useParams();
     const reactNavigator = useNavigate();
@@ -19,6 +19,8 @@ const EditorPage = () => {
     const [language, setLanguage] = useState('');
     const [input, setInput] = useState('');
     const [output, setOutput] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const[isOutputAreaVisible,setIsOutputAreaVisible]=useState(false);
 
     // Mapping for Judge0 language IDs
     const languageMapping = {
@@ -75,6 +77,7 @@ const EditorPage = () => {
         const handleClickOutside = (event) => {
             if (terminalRef.current && !terminalRef.current.contains(event.target) && isTerminalOpen) {
                 setTerminalOpen(false);
+                setIsOutputAreaVisible(false);
             }
         };
 
@@ -85,8 +88,12 @@ const EditorPage = () => {
     }, [isTerminalOpen]);
 
     const runCode = async () => {
+        //
+        setIsLoading(true);
+
         if (!language) {
             toast.error('Please select a language.');
+            setIsLoading(false);
             return;
         }
 
@@ -110,38 +117,47 @@ const EditorPage = () => {
             } else {
                 toast.error(data.error || 'Failed to execute code.');
                 setOutput(data.error);
+                setIsLoading(false);
             }
         } catch (err) {
             toast.error('Failed to execute the code.');
             console.error(err);
+            setIsLoading(false);
         }
+        
     };
 
     const pollForOutput = async (token) => {
+        // setIsOutputAreaVisible(true);
+
         try {
             const response = await fetch(`http://localhost:5000/api/get-output/${token}`);
             const data = await response.json();
             if (data.status === 'Processing') {
                 setTimeout(() => pollForOutput(token), 2000); // Retry polling after 2 seconds
             } else {
+                setIsOutputAreaVisible(true);
                 setOutput(data.output);
+                setIsLoading(false);
             }
         } catch (err) {
             toast.error('Failed to fetch the output.');
             console.error(err);
+            setIsLoading(false);
         }
     };
 
     if (!location.state) {
         return <Navigate to="/" />;
-    }
+    }  
 
     return (
         <div className="mainWrap">
             <div className="aside">
                 <div className="asideInner">
                     <div className="logo">
-                        <img className="logoImage" src="/code-sync.png" alt="logo" />
+                        {/* <img className="logoImage" src="/Logo.PNG" alt="logo" /> */}
+                        <h3>Lets's Code</h3>
                     </div>
                     <h3>Connected</h3>
                     <div className="clientsList">
@@ -193,13 +209,39 @@ const EditorPage = () => {
                         placeholder="Enter input"
                         className="inputArea"
                     ></textarea>
-                    <button onClick={runCode} className="executeBtn">
-                        Execute
+                    <button onClick={runCode} disabled={isLoading} className="executeBtn">
+                        {isLoading? 'Executing...' :'Execute'}
                     </button>
-                    <div className="outputArea">
-                        <h4>Output:</h4>
+
+                    {/* {isLoading ?(
+                        <div className="spinner"></div>
+                    ) :(
+
+
+                        {isOutputAreaVisible && (
+                        <div className="outputArea">
+                        <h3>Output:</h3>
                         <pre>{output}</pre>
-                    </div>
+                        </div>
+
+                        )}
+
+                    )
+                
+                    } */}
+
+                    {isLoading ? (
+                     <div className="spinner"></div>
+                     ) : (
+                        isOutputAreaVisible && (
+                            <div className="outputArea">
+                                <h3>Output:</h3>
+                                <pre>{output}</pre>
+                            </div>
+                         )
+                     )}
+
+                    
                 </div>
             )}
         </div>
@@ -218,226 +260,3 @@ export default EditorPage;
 
 
 
-
-
-
-
-// import React, { useState, useRef, useEffect } from 'react';
-// import toast from 'react-hot-toast';
-// import '../App.css';
-
-// import ACTIONS from '../Actions';
-// import Client from '../components/Client';
-// import Editor from '../components/Editor';
-// import { initSocket } from '../socket';
-// import {
-//     useLocation,
-//     useNavigate,
-//     Navigate,
-//     useParams,
-// } from 'react-router-dom';
-
-// const EditorPage = () => {
-//     const socketRef = useRef(null);
-//     const codeRef = useRef(null);
-//     const location = useLocation();
-//     const { roomId } = useParams();
-//     const reactNavigator = useNavigate();
-//     const [clients, setClients] = useState([]);
-
-//     useEffect(() => {
-//         const init = async () => {
-//             socketRef.current = await initSocket();
-//             socketRef.current.on('connect_error', (err) => handleErrors(err));
-//             socketRef.current.on('connect_failed', (err) => handleErrors(err));
-
-//             function handleErrors(e) {
-//                 console.log('socket error', e);
-//                 toast.error('Socket connection failed, try again later.');
-//                 reactNavigator('/');
-//             }
-
-//             socketRef.current.emit(ACTIONS.JOIN, {
-//                 roomId,
-//                 username: location.state?.username,
-//             });
-
-//             // Listening for joined event
-//             socketRef.current.on(
-//                 ACTIONS.JOINED,
-//                 ({ clients, username, socketId }) => {
-//                     if (username !== location.state?.username) {
-//                         toast.success(`${username} joined the room.`);
-//                         console.log(`${username} joined`);
-//                     }
-//                     setClients(clients);
-//                     socketRef.current.emit(ACTIONS.SYNC_CODE, {
-//                         code: codeRef.current,
-//                         socketId,
-//                     });
-//                 }
-//             );
-
-//             // Listening for disconnected
-//             socketRef.current.on(
-//                 ACTIONS.DISCONNECTED,
-//                 ({ socketId, username }) => {
-//                     toast.success(`${username} left the room.`);
-//                     setClients((prev) => {
-//                         return prev.filter(
-//                             (client) => client.socketId !== socketId
-//                         );
-//                     });
-//                 }
-//             );
-//         };
-//         init();
-//         return () => {
-//             socketRef.current.disconnect();
-//             socketRef.current.off(ACTIONS.JOINED);
-//             socketRef.current.off(ACTIONS.DISCONNECTED);
-//         };
-//     }, []);
-
-//     async function copyRoomId() {
-//         try {
-//             await navigator.clipboard.writeText(roomId);
-//             toast.success('Room ID has been copied to your clipboard');
-//         } catch (err) {
-//             toast.error('Could not copy the Room ID');
-//             console.error(err);
-//         }
-//     }
-
-//     function leaveRoom() {
-//         reactNavigator('/');
-//     }
-
-//     if (!location.state) {
-//         return <Navigate to="/" />;
-//     }
-
-//     return (
-//         <div className="mainWrap">
-//             <div className="aside">
-//                 <div className="asideInner">
-//                     <div className="logo">
-//                         <img
-//                             className="logoImage"
-//                             src="/code-sync.png"
-//                             alt="logo"
-//                         />
-//                     </div>
-//                     <h3>Connected</h3>
-//                     <div className="clientsList">
-//                         {clients.map((client) => (
-//                             <Client
-//                                 key={client.socketId}
-//                                 username={client.username}
-//                             />
-//                         ))}
-//                     </div>
-//                 </div>
-//                 <button className="copybtn" onClick={copyRoomId}>
-//                     Copy ROOM ID
-//                 </button>
-//                 <button className="leavebtn" onClick={leaveRoom}>
-//                     Leave
-//                 </button>
-//             </div>
-//             <div className="editorWrap">
-//                 <Editor
-//                     socketRef={socketRef}
-//                     roomId={roomId}
-//                     onCodeChange={(code) => {
-//                         codeRef.current = code;
-//                     }}
-//                 />
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default EditorPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React, {useState} from 'react';
-// import Client from '../components/Client.js';
-// import Editor from '../components/Editor.js';
-// // import {Logo} from '../public/Logo';
-
-
-// const EditorPage = ()=>{
-
-//     const [clients,setClients]=useState([
-//         {socketId:1 ,username:'Rohan'},
-//         {socketId:2 ,username:'Rohit'}
-//     ]);
-
-//  console.log("rendering EditorPage");
-//     return (
-
-                
-//         <div className='Main'>
-
-//             <div className='left'>
-
-//                 <div className='left-inner'>
-
-//                     <div className='logo'>
-//                          <img className='logoImg'  src="Logo.PNG"
-//                     alt="logo"/>
-//                     </div>
-
-//                     <h3>Connected</h3>
-
-
-//                     <div className='client-list'>
-
-//                        {
-//                         clients.map((client)=>(
-//                             <Client
-//                               key={client.socketId}
-//                               username={client.username}
-//                             /> 
-//                         ))
-//                        }                    
-
-//                     </div>
-                        
-//                 </div>
-
-
-//                 <button className='copybtn'>copy Room ID</button>
-//                 <button className='leavebtn'>Leave button</button>
-
-//             </div>
-
-
-//             <div className='right'>
-
-//                  <Editor/> 
-                  
-//             </div>
-
-//         </div>
-        
-        
-//     )
-
-
-// }
-// export default EditorPage
