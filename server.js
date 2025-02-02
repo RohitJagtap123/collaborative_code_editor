@@ -19,7 +19,8 @@ app.use(express.json());
 
 
 
-const JUDGE0_API_BASE_URL = "https://judge0-ce.p.rapidapi.com";
+const JUDGE0_API_BASE_URL = process.env.JUDGE0_API_BASE_URL || "https://judge0-ce.p.rapidapi.com";
+;
 const JUDGE0_API_KEY = process.env.JUDGE0_API_KEY; // Store your RapidAPI key in .env
 const JUDGE0_API_HOST = "judge0-ce.p.rapidapi.com"; // Judge0 API Host
 
@@ -157,9 +158,6 @@ io.on('connection', (socket) => {
         socket.leave();
     });
 });
-
-
-
 
 
 const PORT = process.env.PORT || 5000;

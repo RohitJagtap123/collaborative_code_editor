@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
     const navigate = useNavigate();
-
     const [roomId, setRoomId] = useState('');
     const [username, setUsername] = useState('');
     
@@ -13,16 +12,20 @@ const Home = () => {
         e.preventDefault();
         const id = uuidV4();
         setRoomId(id);
-        toast.success('Created a new room');
+        toast.success('New Room Created Successfully!');
     };
 
     const joinRoom = () => {
         if (!roomId || !username) {
-            toast.error('ROOM ID & username is required');
+            toast.error('Both Room ID and Username are required!');
+            return;
+        }
+        if (roomId.length !== 36) {
+            toast.error('Invalid Room ID format');
+            setIsRoomIdValid(false);
             return;
         }
 
-        // Redirect
         navigate(`/editor/${roomId}`, {
             state: {
                 username,
@@ -35,43 +38,47 @@ const Home = () => {
             joinRoom();
         }
     };
+
     return (
         <div className="homePageWrapper">
             <div className="formWrapper">
                 <img
                     className="homePageLogo"
                     src="Logo.PNG"
-                    alt="logo"
+                    alt="App Logo"
                 />
-                <h4 className="mainLabel">Paste invitation ROOM ID</h4>
+                <h4 className="mainLabel">Collaborate Seamlessly with Coders</h4>
                 <div className="inputGroup">
                     <input
                         type="text"
-                        className="inputBox"
-                        placeholder="ROOM ID"
-                        onChange={(e) => setRoomId(e.target.value)}
+                        className={`inputBox ${!isRoomIdValid ? 'inputError' : ''}`}
+                        placeholder="Enter Room ID"
+                        onChange={(e) => {
+                            setRoomId(e.target.value);
+                            setIsRoomIdValid(true);
+                        }}
                         value={roomId}
                         onKeyUp={handleInputEnter}
                     />
                     <input
                         type="text"
                         className="inputBox"
-                        placeholder="USERNAME"
+                        placeholder="Enter Your Username"
                         onChange={(e) => setUsername(e.target.value)}
                         value={username}
                         onKeyUp={handleInputEnter}
                     />
                     <button className="btn joinBtn" onClick={joinRoom}>
-                        Join
+                        Join Room
                     </button>
                     <span className="createInfo">
-                        If you don't have an invite then create &nbsp;
+                        Don’t have a Room? &nbsp;
                         <a
                             onClick={createNewRoom}
                             href=""
                             className="createNewBtn"
                         >
-                            new room
+                            Create One
                         </a>
                     </span>
                 </div>
