@@ -5,28 +5,24 @@ import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
     const navigate = useNavigate();
+
     const [roomId, setRoomId] = useState('');
     const [username, setUsername] = useState('');
-    const [isRoomIdValid, setIsRoomIdValid] = useState(true);
-
+    
     const createNewRoom = (e) => {
         e.preventDefault();
         const id = uuidV4();
         setRoomId(id);
-        toast.success('New Room Created Successfully!');
+        toast.success('Created a new room');
     };
 
     const joinRoom = () => {
         if (!roomId || !username) {
-            toast.error('Both Room ID and Username are required!');
-            return;
-        }
-        if (roomId.length !== 36) {
-            toast.error('Invalid Room ID format');
-            setIsRoomIdValid(false);
+            toast.error('ROOM ID & username is required');
             return;
         }
 
+        // Redirect
         navigate(`/editor/${roomId}`, {
             state: {
                 username,
@@ -41,45 +37,46 @@ const Home = () => {
     };
 
     return (
-        <div className="homePageWrapper">
-            <div className="formWrapper">
+        <div className="flex justify-center items-center min-h-screen bg-gray-100">
+            <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm text-center">
                 <img
-                    className="homePageLogo"
+                    className="w-24 mx-auto mb-6"
                     src="Logo.PNG"
-                    alt="App Logo"
+                    alt="logo"
                 />
-                <h4 className="mainLabel">Collaborate Seamlessly with Coders</h4>
-                <div className="inputGroup">
+                <h4 className="text-2xl font-semibold mb-4">Paste invitation ROOM ID</h4>
+                <div className="space-y-4">
                     <input
                         type="text"
-                        className={`inputBox ${!isRoomIdValid ? 'inputError' : ''}`}
-                        placeholder="Enter Room ID"
-                        onChange={(e) => {
-                            setRoomId(e.target.value);
-                            setIsRoomIdValid(true);
-                        }}
+                        className="w-full p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="ROOM ID"
+                        onChange={(e) => setRoomId(e.target.value)}
                         value={roomId}
                         onKeyUp={handleInputEnter}
                     />
                     <input
                         type="text"
-                        className="inputBox"
-                        placeholder="Enter Your Username"
+                        className="w-full p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="USERNAME"
                         onChange={(e) => setUsername(e.target.value)}
                         value={username}
                         onKeyUp={handleInputEnter}
                     />
-                    <button className="btn joinBtn" onClick={joinRoom}>
-                        Join Room
+                    <button 
+                        className="w-full p-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300"
+                        onClick={joinRoom}
+                    >
+                        Join
                     </button>
-                    <span className="createInfo">
-                        Don’t have a Room? &nbsp;
+                    <span className="block text-sm text-gray-600 mt-4">
+                        If you don't have an invite,
                         <a
                             onClick={createNewRoom}
-                            href=""
-                            className="createNewBtn"
+                            href="#"
+                            className="text-blue-500 hover:underline cursor-pointer"
                         >
-                            Create One
+                            <br></br>
+                             create a new room
                         </a>
                     </span>
                 </div>
