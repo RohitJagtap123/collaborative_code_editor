@@ -17,7 +17,12 @@ require("dotenv").config();
 app.use(cors());
 app.use(express.json());
 
+// Database
+require("./config/db").connectDB()
 
+// Routes
+const user = require("./routes/user");
+app.use("/api",user);
 
 const JUDGE0_API_BASE_URL = process.env.JUDGE0_API_BASE_URL || "https://judge0-ce.p.rapidapi.com";
 ;
@@ -162,6 +167,8 @@ io.on('connection', (socket) => {
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+
+
 
 
 

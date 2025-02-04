@@ -47,7 +47,6 @@ const Home = () => {
                     className="w-24 mx-auto mb-6"
                     src="Logo.PNG"
                     alt="logo"
-                    alt="logo"
                 />
                 <h4 className="text-2xl font-semibold mb-4">Paste invitation ROOM ID</h4>
                 <div className="space-y-4">

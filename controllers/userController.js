@@ -1,14 +1,15 @@
-import userModel from "./models/userModel.js";
-import bcrypt from 'bcrypt'
-import validator from 'validator'
-import jwt from 'jsonwebtoken'
+const userModel = require("./models/userModel.js");
+const bcrypt = require('bcrypt');
+const validator = require('validator');
+const jwt = require('jsonwebtoken');
+
 
 const createToken = (id) =>{
     return jwt.sign({id},process.env.JWT_SECRET,{expiresIn:'2d'})
 }
 
 
-const registerUser=async(req,res)=>{
+exports.registerUser=async(req,res)=>{
     const {name,password,email} = req.body;
     try{
 
@@ -34,6 +35,7 @@ const registerUser=async(req,res)=>{
         })
 
         const user=await newUser.save();
+        // Registeration ke vakt token kyu banaya h ?
         const token=createToken(user._id);
         res.json({success:true, token,message:'User registered successfully', user:user});
 
@@ -45,7 +47,8 @@ const registerUser=async(req,res)=>{
     }
 
 }
-const loginUser=async(req,res)=>{
+
+exports.loginUser=async(req,res)=>{
     const {email,password}=req.body;
     try{
         const user=await userModel.findOne({email});
@@ -71,4 +74,4 @@ const loginUser=async(req,res)=>{
 
 }
 
-export {registerUser,loginUser}
+
