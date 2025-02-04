@@ -66,14 +66,14 @@ footer a {
 }
 
 .joinBtn{
-    background: #007bff;
-    width: 120px; 
-    margin: 10px auto; 
+    background: #4aed88;
+    width: 120px; /* Adjust button width */
+    margin: 10px auto; /* Center the button */
     text-align: center;
 }
 
 .joinBtn:hover , .leavebtn:hover {
-    background: #0056b3;
+    background: #2b824c;
 }
 
 .createInfo {
@@ -82,16 +82,16 @@ footer a {
 }
 
 .createNewBtn {
-    color: #007bff;
+    color: #4aed88;
     text-decoration: none;
-    border-bottom: 1px solid #007bff;
+    border-bottom: 1px solid #4aed88;
     transition: all 0.3s ease-in-out;
 }
 
 .createNewBtn:hover,
 footer a:hover {
-    color: #0056b3;
-    border-color: #0056b3;
+    color: #368654;
+    border-color: #368654;
 }
 
 /*Editor-page CSS*/
@@ -264,13 +264,27 @@ line-height: 1.6;
 
 /* Language Selector */
 .languageSelector {
-    background-color: #2e2e2e;
+    /* background-color: #2e2e2e;
     color: #fff;
     border: 1px solid #555;
     padding: 8px;
     border-radius: 5px;
-    font-size: 14px;
+    font-size: 14px; */
+
+    width: 200px; /* Set the width of the dropdown */
+  padding: 10px; /* Add some padding inside the dropdown */
+  border: 2px solid #007bff; /* Add a border */
+  border-radius: 5px; /* Round the corners */
+  background-color: #f8f9fa; /* Set the background color */
+  color: #000; /* Set the text color */
+  font-weight: bold; /* Make the text bold */
+  font-size: 16px; /* Adjust the font size */
 }
+
+.languageSelector option {
+    color: #000; /* Set text color for dropdown options */
+    background-color: #fff; /* Background color for dropdown options */
+  }
 
 /* Input Area */
 .inputArea {
@@ -280,13 +294,15 @@ line-height: 1.6;
     padding: 10px;
     border-radius: 5px;
     font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
     resize: none;
-    min-height: 100px;
+    min-height: 200px;
+   
 }
 
 /* Execute Button */
 .executeBtn {
-    background-color: #28a745;
+    background-color: #007bff;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -298,19 +314,36 @@ line-height: 1.6;
 }
 
 .executeBtn:hover {
-    background-color: #218838;
+    background-color: #0056b3;
     transform: scale(1.05);
 }
 
 /* Output Area */
 .outputArea {
     background-color: #121212;
-    color: #00ff88;
+    color: #f5f5f5;
     padding: 15px;
     border: 1px solid #333;
     border-radius: 5px;
     font-family: 'Courier New', Courier, monospace;
-    font-size: 14px;
+    font-size: 18px;
+    font-weight:600;
     overflow-y: auto;
-    min-height: 100px;
+    min-height: 300px;
+}
+
+/*Spinner part*/
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid #3498db; /* Blue spinner */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

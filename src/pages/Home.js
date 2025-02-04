@@ -6,22 +6,27 @@ import { useNavigate } from 'react-router-dom';
 const Home = () => {
     const navigate = useNavigate();
 
+
     const [roomId, setRoomId] = useState('');
     const [username, setUsername] = useState('');
+    
     
     const createNewRoom = (e) => {
         e.preventDefault();
         const id = uuidV4();
         setRoomId(id);
         toast.success('Created a new room');
+        toast.success('Created a new room');
     };
 
     const joinRoom = () => {
         if (!roomId || !username) {
             toast.error('ROOM ID & username is required');
+            toast.error('ROOM ID & username is required');
             return;
         }
 
+        // Redirect
         // Redirect
         navigate(`/editor/${roomId}`, {
             state: {
@@ -35,13 +40,13 @@ const Home = () => {
             joinRoom();
         }
     };
-
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-100">
             <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm text-center">
                 <img
                     className="w-24 mx-auto mb-6"
                     src="Logo.PNG"
+                    alt="logo"
                     alt="logo"
                 />
                 <h4 className="text-2xl font-semibold mb-4">Paste invitation ROOM ID</h4>
@@ -81,6 +86,12 @@ const Home = () => {
                     </span>
                 </div>
             </div>
+            {/* <footer>
+                <h4>
+                    Built by &nbsp;
+                    <a href="https://github.com/RohitJagtap123">Rohit Jagtap</a>
+                </h4>
+            </footer> */}
         </div>
     );
 };
