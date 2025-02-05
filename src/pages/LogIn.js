@@ -2,22 +2,41 @@ import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Login = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         if (!email || !password) {
             toast.error('All fields are required!');
             return;
         }
 
-        // Simulating successful login
-        toast.success('Logged In Successfully!');
-        navigate('/dashboard');
+        setLoading(true);
+
+        try {
+            const response = await axios.post('http://localhost:5001/api/login', {
+                email,
+                password
+            });
+
+            if (response.data.success) {
+                localStorage.setItem('token', response.data.token);
+                toast.success('Logged In Successfully!');
+                navigate('/dashboard'); 
+            } else {
+                toast.error(response.data.message);
+            }
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Login failed!');
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleInputEnter = (e) => {
@@ -53,8 +72,12 @@ const Login = () => {
                             {showPassword ? <EyeOff /> : <Eye />}
                         </span>
                     </div>
-                    <button className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600" onClick={handleLogin}>
-                        Log In
+                    <button
+                        className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 disabled:bg-gray-400"
+                        onClick={handleLogin}
+                        disabled={loading}
+                    >
+                        {loading ? 'Logging in...' : 'Log In'}
                     </button>
                     <span className="text-sm text-gray-600">
                         Don't have an account? &nbsp;
