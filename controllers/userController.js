@@ -20,7 +20,7 @@ exports.registerUser = async (req, res) => {
             return res.status(400).json({ success: false, message: "Please enter a valid email" });
         }
 
-        if (!validator.isStrongPassword(password, { minLength: 8, minNumbers: 1, minUppercase: 1 })) {
+        if (!validator.isStrongPassword(password, { minLength: 8 })) {
             return res.status(400).json({ success: false, message: "Password must be stronger (min 8 chars, 1 uppercase, 1 number)" });
         }
 

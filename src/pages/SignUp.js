@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -11,8 +12,9 @@ const SignUp = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    const handleSignUp = () => {
+    const handleSignUp = async () => {
         if (!name || !email || !password || !confirmPassword) {
             toast.error('All fields are required!');
             return;
@@ -22,9 +24,27 @@ const SignUp = () => {
             return;
         }
 
-        // Simulating successful signup
-        toast.success('Account Created Successfully!');
-        navigate('/dashboard');
+        setLoading(true);
+
+        try {
+            const response = await axios.post('http://localhost:5001/api/signup', {
+                name,
+                email,
+                password
+            });
+
+            if (response.data.success) {
+                toast.success('Account Created Successfully!');
+                localStorage.setItem('token', response.data.token);
+                navigate('/'); 
+            } else {
+                toast.error(response.data.message);
+            }
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Signup failed!');
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleInputEnter = (e) => {
@@ -81,8 +101,12 @@ const SignUp = () => {
                             {showConfirmPassword ? <EyeOff /> : <Eye />}
                         </span>
                     </div>
-                    <button className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600" onClick={handleSignUp}>
-                        Sign Up
+                    <button
+                        className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 disabled:bg-gray-400"
+                        onClick={handleSignUp}
+                        disabled={loading}
+                    >
+                        {loading ? 'Creating Account...' : 'Sign Up'}
                     </button>
                     <span className="text-sm text-gray-600">
                         Already have an account? &nbsp;
