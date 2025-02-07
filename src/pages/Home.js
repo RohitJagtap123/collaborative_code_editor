@@ -5,33 +5,24 @@ import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
     const navigate = useNavigate();
-
-
     const [roomId, setRoomId] = useState('');
     const [username, setUsername] = useState('');
-    
-    
+
     const createNewRoom = (e) => {
         e.preventDefault();
         const id = uuidV4();
         setRoomId(id);
         toast.success('Created a new room');
-        toast.success('Created a new room');
     };
 
     const joinRoom = () => {
         if (!roomId || !username) {
-            toast.error('ROOM ID & username is required');
-            toast.error('ROOM ID & username is required');
+            toast.error('ROOM ID & Username are required');
             return;
         }
 
-        // Redirect
-        // Redirect
         navigate(`/editor/${roomId}`, {
-            state: {
-                username,
-            },
+            state: { username },
         });
     };
 
@@ -40,57 +31,61 @@ const Home = () => {
             joinRoom();
         }
     };
+
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gray-100">
-            <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm text-center">
-                <img
-                    className="w-24 mx-auto mb-6"
-                    src="Logo.PNG"
-                    alt="logo"
-                />
-                <h4 className="text-2xl font-semibold mb-4">Paste invitation ROOM ID</h4>
-                <div className="space-y-4">
-                    <input
-                        type="text"
-                        className="w-full p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="ROOM ID"
-                        onChange={(e) => setRoomId(e.target.value)}
-                        value={roomId}
-                        onKeyUp={handleInputEnter}
-                    />
-                    <input
-                        type="text"
-                        className="w-full p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="USERNAME"
-                        onChange={(e) => setUsername(e.target.value)}
-                        value={username}
-                        onKeyUp={handleInputEnter}
-                    />
-                    <button 
-                        className="w-full p-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300"
-                        onClick={joinRoom}
-                    >
-                        Join
-                    </button>
-                    <span className="block text-sm text-gray-600 mt-4">
-                        If you don't have an invite,
-                        <a
-                            onClick={createNewRoom}
-                            href="#"
-                            className="text-blue-500 hover:underline cursor-pointer"
+        <div className="flex justify-center items-center min-h-screen bg-gray-100 text-gray-900">
+            <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-xl text-center">
+                {/* Header */}
+                <div className="flex justify-center mb-6">
+                    <img src="Logo.png" className="w-60 h-12" />
+                </div>
+
+                <h2 className="text-3xl font-semibold">
+                    Collaborative Code Editor
+                </h2>
+                <p className="text-gray-600 text-lg mt-2">
+                    Connect, collaborate, and code from anywhere with us.
+                </p>
+
+                <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                <button 
+                    onClick={createNewRoom} 
+                    className="bg-blue-500 text-white w-full sm:w-45 py-2 rounded-full font-medium shadow-md hover:bg-blue-600 transition"
+                >
+                    + Create Room
+                </button>
+
+
+                    <div className="flex items-center border-2 border-gray-300 rounded-full px-4 py-3 w-full">
+                        <input 
+                            type="text"
+                            placeholder="Enter room id"
+                            className="w-full focus:outline-none text-center"
+                            value={roomId}
+                            onChange={(e) => setRoomId(e.target.value)}
+                            onKeyUp={handleInputEnter}
+                        />
+                        <button 
+                            onClick={joinRoom} 
+                            className="text-blue-500 font-semibold ml-3 disabled:text-gray-400"
+                            disabled={!roomId || !username}
                         >
-                            <br></br>
-                             create a new room
-                        </a>
-                    </span>
+                            Join
+                        </button>
+                    </div>
+                </div>
+
+                <div className="mt-4">
+                    <input 
+                        type="text"
+                        placeholder="Enter your username"
+                        className="w-full border-2 border-gray-300 rounded-full px-4 py-3 text-center focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        onKeyUp={handleInputEnter}
+                    />
                 </div>
             </div>
-            {/* <footer>
-                <h4>
-                    Built by &nbsp;
-                    <a href="https://github.com/RohitJagtap123">Rohit Jagtap</a>
-                </h4>
-            </footer> */}
         </div>
     );
 };
