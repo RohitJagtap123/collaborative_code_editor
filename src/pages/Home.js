@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
-import { v4 as uuidV4 } from 'uuid';
-import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { v4 as uuidV4 } from "uuid";
+
+axios.defaults.withCredentials = true;
 
 const Home = () => {
     const navigate = useNavigate();

@@ -5,6 +5,7 @@ import EditorPage from './pages/EditorPage';
 import Home from './pages/Home'; 
 import Login from './pages/LogIn';
 import SignUp from './pages/SignUp';
+import ApproveAccess from './pages/ApproveAccess';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="/signup" element={<SignUp/>}></Route>
             <Route path="/dashboard" element={<Home/>}></Route>
              <Route path="/editor/:roomId" element={<EditorPage/>}></Route>
+             <Route path="/approve-access" element={<ApproveAccess/>}></Route>
          </Routes>
      </BrowserRouter>
      </div>
