@@ -38,37 +38,6 @@ const createRoom = async (req, res) => {
 };
 
 /**
- * @desc Get the owner of a room
- * @route GET /api/rooms/owner/:roomId
- * @access Public
- */
-const getRoomOwner = async (req, res) => {
-    console.log("INSIDE GET ROOM OWNER");
-  const roomId = req.body.roomId;
-  const email = req.user.email;
-
-  console.log(roomId);
-  console.log(email);
-
-  if (!roomId || !username) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Room ID and username are required" });
-  }
-
-  const room = Room.get(roomId);
-
-  console.log(room)
-  console.log(room.ownerEmail)
-
-  if (room && room.ownerEmail === email) {
-    return res.json({ success: true, isOwner: true });
-  } else {
-    return res.json({ success: true, isOwner: false });
-  }
-};
-
-/**
  * @desc Request access to a room
  * @route POST /api/rooms/request-access
  * @access Public
@@ -122,20 +91,46 @@ const requestAccess = async (req, res) => {
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: room.ownerEmail,
-      subject: "Room Access Request",
+      subject: "🔑 Room Access Request - Action Required",
       html: `
-    <p>User with email <strong>${email}</strong> has requested to join room <strong>${roomId}</strong>.</p>
-    <p>Click below to approve or reject the request:</p>
-    <a href="${approvalLink}" 
-       style="display:inline-block;padding:10px 20px;margin:5px;background-color:#28a745;color:white;text-decoration:none;border-radius:5px;">
-       ✅ Approve
-    </a>
-    <a href="${rejectionLink}" 
-       style="display:inline-block;padding:10px 20px;margin:5px;background-color:#dc3545;color:white;text-decoration:none;border-radius:5px;">
-       ❌ Reject
-    </a>
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border-radius: 10px; background-color: #f9f9f9; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+      
+      <h2 style="color: #333; text-align: center;">🔔 Access Request for Your Room</h2>
+      
+      <p style="font-size: 16px; color: #555;">
+        <strong>${email}</strong> has requested access to your room <strong>${roomId}</strong>.
+      </p>
+      
+      <p style="font-size: 16px; color: #555;">
+        Please approve or reject the request using the buttons below:
+      </p>
+      
+      <div style="text-align: center; margin: 20px 0;">
+        <a href="${approvalLink}" 
+           style="display: inline-block; padding: 12px 20px; font-size: 16px; font-weight: bold; color: white; background-color: #28a745; text-decoration: none; border-radius: 5px; margin-right: 10px;">
+           ✅ Approve
+        </a>
+        
+        <a href="${rejectionLink}" 
+           style="display: inline-block; padding: 12px 20px; font-size: 16px; font-weight: bold; color: white; background-color: #dc3545; text-decoration: none; border-radius: 5px;">
+           ❌ Reject
+        </a>
+      </div>
+      
+      <p style="font-size: 14px; color: #777; text-align: center;">
+        If you did not expect this request, you can ignore this email.
+      </p>
+      
+      <hr style="border: none; height: 1px; background-color: #ddd; margin: 20px 0;">
+      
+      <footer style="font-size: 12px; color: #888; text-align: center;">
+        🔒 Secure Collaboration Platform | &copy; ${new Date().getFullYear()}
+      </footer>
+    
+    </div>
   `,
     };
+
 
 
     await transporter.sendMail(mailOptions);
@@ -186,6 +181,7 @@ const approveAccess = async (req, res) => {
 };
 
 const checkAccess =  async (req, res) => {
+    console.log("INSIDE CHECK ACCESS");
   const { roomId } = req.query;
   const email = req.user.email; // Assuming user is authenticated
 
@@ -204,9 +200,10 @@ const checkAccess =  async (req, res) => {
 };
 
 
+
+
 module.exports = {
   createRoom,
-  getRoomOwner,
   requestAccess,
   approveAccess,
   checkAccess,
