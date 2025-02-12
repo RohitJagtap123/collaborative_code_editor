@@ -1,19 +1,30 @@
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 
-const authMiddleware=async(req,res,next)=>{
-    const token = req.headers.authorization?.split(" ")[1]; 
-    if(!token){
-        return res.json({success:false, message:'Not Authorized, login again'})
-    }
+const authMiddleware = async (req, res, next) => {
+    console.log("INSIDE AUTH MIDDLEWARE");
+  let token = req.cookies.token;
 
-    try {
-        const token_decode = jwt.verify(token,process.env.JWT_SECRET);
-        req.body.userId = token_decode.id;
-        next();
-    } catch (error) {
-        console.log(error)
-        res.json({success:false, message:'Error'})
-    }
-}
+  console.log("Token is", token);
+
+  if (!token) {
+    return res
+      .status(401)
+      .json({ success: false, message: "Not Authorized, login again" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, "Roww");
+    req.user = { id: decoded.userId, email: decoded.email }; // Attach user details to request
+
+    console.log("Email: ",req.user.email)
+
+    next();
+  } catch (error) {
+    console.log("JWT Verification Error:", error);
+    res
+      .status(401)
+      .json({ success: false, message: "Invalid or expired token" });
+  }
+};
 
 module.exports = authMiddleware;
