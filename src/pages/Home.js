@@ -17,11 +17,12 @@ const Home = () => {
     e.preventDefault();
     try {
       const id = uuidV4();
+      setLoading(true);
       const response = await axios.post(
         "http://localhost:5001/api/createRoom",
         {
           id,
-          owner: username, // Set the creator as the room owner
+          owner: username,
         }
       );
 
@@ -38,6 +39,8 @@ const Home = () => {
     } catch (error) {
       toast.error("Error creating room");
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -49,10 +52,30 @@ const Home = () => {
     }
 
     try {
-      setLoading(true); // Show spinner
+      setLoading(true);
+
+    //   // Step 1: Check if user was already approved before
+    //   const checkAccessResponse = await axios.get(
+    //     "http://localhost:5001/api/checkaccess1",
+    //     { roomId, username },
+    //     { withCredentials: true }
+    //   );
+
+    //   if (checkAccessResponse.data.status === "approved") {
+    //     toast.success("You are already approved! Redirecting...");
+    //     setLoading(false);
+    //     navigate(`/editor/${roomId}`, { state: { username } });
+    //     return; // Exit early, no need to request access again
+    //   }
+    //   else{
+    //     console.log("Check Access Response", checkAccessResponse.data);
+    //   }
+
+
+      // Step 2: If not approved, send a request
       const response = await axios.post(
         "http://localhost:5001/api/requestAccess",
-        { roomId, username }, // Ensure username is sent
+        { roomId, username },
         { withCredentials: true }
       );
 
@@ -61,14 +84,14 @@ const Home = () => {
 
         let approved = false;
         let retryCount = 0;
-        const maxRetries = 20; // Prevent infinite loop (e.g., 20 tries ~60 seconds)
+        const maxRetries = 20;
 
         while (!approved && retryCount < maxRetries) {
-          await new Promise((resolve) => setTimeout(resolve, 3000)); // Poll every 3s
+          await new Promise((resolve) => setTimeout(resolve, 5000));
           retryCount++;
 
           const statusResponse = await axios.get(
-            `http://localhost:5001/api/check-access?roomId=${roomId}`,
+            `http://localhost:5001/api/check-access?roomId=${roomId}&username=${username}`,
             { withCredentials: true }
           );
 
@@ -76,7 +99,8 @@ const Home = () => {
             approved = true;
             toast.success("Access approved! Redirecting...");
             setLoading(false);
-            navigate(`/editor/${roomId}`, { state: { username } }); // Redirect properly
+            navigate(`/editor/${roomId}`, { state: { username } });
+            return;
           } else if (statusResponse.data.status === "denied") {
             toast.error("Access denied!");
             setLoading(false);
@@ -91,10 +115,10 @@ const Home = () => {
         toast.error(response.data.message || "Failed to request access");
       }
     } catch (error) {
-      toast.error("Error sending access request");
+      toast.error("Error checking or requesting access");
       console.error(error);
     } finally {
-      setLoading(false); // Hide spinner
+      setLoading(false);
     }
   };
 
@@ -112,6 +136,7 @@ const Home = () => {
             placeholder="ROOM ID"
             onChange={(e) => setRoomId(e.target.value)}
             value={roomId}
+            disabled={loading}
           />
           <input
             type="text"
@@ -119,13 +144,57 @@ const Home = () => {
             placeholder="USERNAME"
             onChange={(e) => setUsername(e.target.value)}
             value={username}
+            disabled={loading}
           />
           <button
-            className="w-full p-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300"
+            className={`w-full p-3 text-white rounded-md transition duration-300 ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-500 hover:bg-blue-600"
+            }`}
             onClick={joinRoom}
+            disabled={loading}
           >
-            Request to Join
+            {loading ? (
+              <div className="flex justify-center items-center">
+                <svg
+                  className="animate-spin h-5 w-5 mr-2 text-white"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 018 8h4l-3 3 3 3h-4a8 8 0 01-8 8v-4l-3 3 3 3v-4a8 8 0 01-8-8H1l3-3-3-3h4z"
+                  />
+                </svg>
+                Processing...
+              </div>
+            ) : (
+              "Request to Join"
+            )}
           </button>
+
+          {/* Progress Slider & Message */}
+          {loading && (
+            <div className="mt-4">
+              <p className="text-sm text-gray-600 font-semibold">
+                Ask the owner to check mail and approve request
+              </p>
+              <div className="relative w-full h-2 bg-gray-300 rounded-full overflow-hidden mt-2">
+                <div className="absolute left-0 top-0 h-full w-1/3 bg-blue-500 animate-slide"></div>
+              </div>
+            </div>
+          )}
+
           <span className="block text-sm text-gray-600 mt-4">
             If you don't have an invite,{" "}
             <a
@@ -138,6 +207,19 @@ const Home = () => {
           </span>
         </div>
       </div>
+
+      {/* Tailwind Animation */}
+      <style>
+        {`
+          @keyframes slide {
+            0% { left: -33%; }
+            100% { left: 100%; }
+          }
+          .animate-slide {
+            animation: slide 1.5s linear infinite;
+          }
+        `}
+      </style>
     </div>
   );
 };

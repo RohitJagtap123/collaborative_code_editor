@@ -13,6 +13,11 @@ const RoomSchema = new mongoose.Schema({
       },
     },
   ],
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    expires: 60 * 60, // Expires after 1 hour
+  },
 });
 
 module.exports = mongoose.model("Room", RoomSchema);
