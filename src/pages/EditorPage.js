@@ -169,7 +169,7 @@ const EditorPage = () => {
                 <button className="copybtn" onClick={() => navigator.clipboard.writeText(roomId)}>
                     Copy ROOM ID
                 </button>
-                <button className="leavebtn" onClick={() => reactNavigator('/')}>
+                <button className="leavebtn" onClick={() => reactNavigator('/dashboard')}>
                     Leave
                 </button>
             </div>
