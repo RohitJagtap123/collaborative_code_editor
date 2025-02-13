@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -10,9 +10,24 @@ const Home = () => {
   const navigate = useNavigate();
   const [roomId, setRoomId] = useState("");
   const [username, setUsername] = useState("");
-  const [loading, setLoading] = useState(false); // Spinner state
+  const [loading, setLoading] = useState(false);
+  const [timer, setTimer] = useState(120);
+  const [isTimerActive, setIsTimerActive] = useState(false);
 
-  // Create a new room
+  useEffect(() => {
+    let countdown;
+    if (isTimerActive && timer > 0) {
+      countdown = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+    } else if (timer === 0) {
+      setIsTimerActive(false);
+      toast.error("Request timed out! Please try again later.");
+      setLoading(false);
+    }
+    return () => clearInterval(countdown);
+  }, [isTimerActive, timer]);
+
   const createNewRoom = async (e) => {
     e.preventDefault();
     try {
@@ -20,10 +35,7 @@ const Home = () => {
       setLoading(true);
       const response = await axios.post(
         "http://localhost:5001/api/createRoom",
-        {
-          id,
-          owner: username,
-        }
+        { id, owner: username }
       );
 
       if (response.data.success) {
@@ -44,7 +56,6 @@ const Home = () => {
     }
   };
 
-  // Request to join a room
   const joinRoom = async () => {
     if (!roomId || !username) {
       toast.error("ROOM ID & username are required");
@@ -54,56 +65,91 @@ const Home = () => {
     try {
       setLoading(true);
 
-    //   // Step 1: Check if user was already approved before
-    //   const checkAccessResponse = await axios.get(
-    //     "http://localhost:5001/api/checkaccess1",
-    //     { roomId, username },
-    //     { withCredentials: true }
-    //   );
+      // Step 1: Check if the user is the owner or already approved
+      let checkResponse;
+      try {
+        checkResponse = await axios.get(
+          `http://localhost:5001/api/checkUserRole?roomId=${roomId}&username=${username}`,
+          { withCredentials: true }
+        );
+      } catch (error) {
+        toast.error("Error verifying user role. Please try again.");
+        console.error("Error in checkUserRole:", error);
+        setLoading(false);
+        return;
+      }
 
-    //   if (checkAccessResponse.data.status === "approved") {
-    //     toast.success("You are already approved! Redirecting...");
-    //     setLoading(false);
-    //     navigate(`/editor/${roomId}`, { state: { username } });
-    //     return; // Exit early, no need to request access again
-    //   }
-    //   else{
-    //     console.log("Check Access Response", checkAccessResponse.data);
-    //   }
+      console.log("User role check response:", checkResponse.data);
 
+      if (
+        checkResponse.data.role === "owner" ||
+        checkResponse.data.role === "approved"
+      ) {
+        toast.success("Access granted! Redirecting...");
+        navigate(`/editor/${roomId}`, { state: { username } });
+        return;
+      }
 
-      // Step 2: If not approved, send a request
-      const response = await axios.post(
-        "http://localhost:5001/api/requestAccess",
-        { roomId, username },
-        { withCredentials: true }
-      );
+      // Step 2: If not owner or approved, proceed to request access
+      setIsTimerActive(true);
+      setTimer(120);
+
+      let response;
+      try {
+        response = await axios.post(
+          "http://localhost:5001/api/requestAccess",
+          { roomId, username },
+          { withCredentials: true }
+        );
+      } catch (error) {
+        toast.error("Access Denied !");
+        console.error("Error in requestAccess:", error);
+        setLoading(false);
+        setIsTimerActive(false);
+        return;
+      }
+
+      console.log("Requesting access...");
+      console.log("API Response:", response.data);
 
       if (response.data.success) {
         toast.success("Access request sent to the room owner");
 
         let approved = false;
         let retryCount = 0;
-        const maxRetries = 20;
+        const maxRetries = 41;
 
         while (!approved && retryCount < maxRetries) {
-          await new Promise((resolve) => setTimeout(resolve, 5000));
+          await new Promise((resolve) => setTimeout(resolve, 3000));
           retryCount++;
 
-          const statusResponse = await axios.get(
-            `http://localhost:5001/api/check-access?roomId=${roomId}&username=${username}`,
-            { withCredentials: true }
-          );
+          let statusResponse;
+          try {
+            statusResponse = await axios.get(
+              `http://localhost:5001/api/check-access?roomId=${roomId}&username=${username}`,
+              { withCredentials: true }
+            );
+          } catch (error) {
+            toast.error("Error checking access status.");
+            console.error("Error in check-access:", error);
+            setLoading(false);
+            setIsTimerActive(false);
+            return;
+          }
+
+          console.log("Access status response:", statusResponse.data);
 
           if (statusResponse.data.status === "approved") {
             approved = true;
             toast.success("Access approved! Redirecting...");
             setLoading(false);
+            setIsTimerActive(false);
             navigate(`/editor/${roomId}`, { state: { username } });
             return;
           } else if (statusResponse.data.status === "denied") {
             toast.error("Access denied!");
             setLoading(false);
+            setIsTimerActive(false);
             return;
           }
         }
@@ -115,12 +161,13 @@ const Home = () => {
         toast.error(response.data.message || "Failed to request access");
       }
     } catch (error) {
-      toast.error("Error checking or requesting access");
+      toast.error("Unexpected error occurred.");
       console.error(error);
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -155,42 +202,20 @@ const Home = () => {
             onClick={joinRoom}
             disabled={loading}
           >
-            {loading ? (
-              <div className="flex justify-center items-center">
-                <svg
-                  className="animate-spin h-5 w-5 mr-2 text-white"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 018 8h4l-3 3 3 3h-4a8 8 0 01-8 8v-4l-3 3 3 3v-4a8 8 0 01-8-8H1l3-3-3-3h4z"
-                  />
-                </svg>
-                Processing...
-              </div>
-            ) : (
-              "Request to Join"
-            )}
+            {loading ? "Processing..." : "Request to Join"}
           </button>
 
-          {/* Progress Slider & Message */}
-          {loading && (
+          {isTimerActive && (
             <div className="mt-4">
               <p className="text-sm text-gray-600 font-semibold">
-                Ask the owner to check mail and approve request
+                Request expires in {Math.floor(timer / 60)}:
+                {(timer % 60).toString().padStart(2, "0")} minutes
               </p>
               <div className="relative w-full h-2 bg-gray-300 rounded-full overflow-hidden mt-2">
-                <div className="absolute left-0 top-0 h-full w-1/3 bg-blue-500 animate-slide"></div>
+                <div
+                  className="absolute left-0 top-0 h-full bg-blue-500"
+                  style={{ width: `${(timer / 120) * 100}%` }}
+                ></div>
               </div>
             </div>
           )}
@@ -207,19 +232,6 @@ const Home = () => {
           </span>
         </div>
       </div>
-
-      {/* Tailwind Animation */}
-      <style>
-        {`
-          @keyframes slide {
-            0% { left: -33%; }
-            100% { left: 100%; }
-          }
-          .animate-slide {
-            animation: slide 1.5s linear infinite;
-          }
-        `}
-      </style>
     </div>
   );
 };
