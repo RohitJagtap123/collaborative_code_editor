@@ -64,16 +64,17 @@ const requestAccess = async (req, res) => {
     const existingParticipant = room.participants.find(
       (p) => p.email === email
     );
-    if (existingParticipant) {
+    if (existingParticipant && existingParticipant.status === "denied") {
       return res
         .status(400)
         .json({ success: false, message: "Request already sent" });
     }
 
-    // Add participant as pending
-    room.participants.push({ email, status: "pending" });
-    await room.save();
-    console.log("Added to DB");
+    if(!existingParticipant){
+        room.participants.push({ email, status: "pending" });
+        await room.save();
+        console.log("Added to DB");
+    }
 
     // Generate approval link
     const approvalLink = `http://localhost:3000/approve-access?roomId=${roomId}&email=${email}&approve=true`;
@@ -199,6 +200,36 @@ const checkAccess =  async (req, res) => {
   }
 };
 
+const checkUserRole =  async (req, res) => {
+    console.log("INSIDE CHECKUSER ROLE")
+  const { roomId, username } = req.query;
+  const email = req.user.email;
+
+  console.log(roomId);
+  console.log(email)
+
+  try {
+    const room = await Room.findOne({ roomId });
+    if (!room) {
+      return res.status(404).json({ message: "Room not found" });
+    }
+
+    if (room.ownerEmail === email) {
+      return res.json({ role: "owner" });
+    }
+
+    const participant = room.participants.find((p) => p.email === email);
+    if (participant && participant.status === "approved") {
+      return res.json({ role: "approved" });
+    }
+
+    return res.json({ role: "pending" });
+  } catch (error) {
+    console.error("Error checking user role:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 
 
 
@@ -207,4 +238,5 @@ module.exports = {
   requestAccess,
   approveAccess,
   checkAccess,
+  checkUserRole,
 };
