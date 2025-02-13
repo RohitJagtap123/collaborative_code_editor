@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { v4 as uuidV4 } from "uuid";
+import {motion} from "framer-motion";
 
 axios.defaults.withCredentials = true;
 
@@ -168,72 +169,90 @@ const Home = () => {
     }
   };
 
-
-  return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm text-center">
-        <img className="w-24 mx-auto mb-6" src="Logo.PNG" alt="logo" />
-        <h4 className="text-2xl font-semibold mb-4">
-          Paste invitation ROOM ID
-        </h4>
-        <div className="space-y-4">
-          <input
-            type="text"
-            className="w-full p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="ROOM ID"
-            onChange={(e) => setRoomId(e.target.value)}
-            value={roomId}
-            disabled={loading}
-          />
-          <input
-            type="text"
-            className="w-full p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="USERNAME"
-            onChange={(e) => setUsername(e.target.value)}
-            value={username}
-            disabled={loading}
-          />
-          <button
-            className={`w-full p-3 text-white rounded-md transition duration-300 ${
-              loading
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-blue-500 hover:bg-blue-600"
-            }`}
-            onClick={joinRoom}
-            disabled={loading}
-          >
-            {loading ? "Processing..." : "Request to Join"}
-          </button>
-
-          {isTimerActive && (
-            <div className="mt-4">
-              <p className="text-sm text-gray-600 font-semibold">
-                Request expires in {Math.floor(timer / 60)}:
-                {(timer % 60).toString().padStart(2, "0")} minutes
-              </p>
-              <div className="relative w-full h-2 bg-gray-300 rounded-full overflow-hidden mt-2">
-                <div
-                  className="absolute left-0 top-0 h-full bg-blue-500"
-                  style={{ width: `${(timer / 120) * 100}%` }}
-                ></div>
-              </div>
-            </div>
-          )}
-
-          <span className="block text-sm text-gray-600 mt-4">
-            If you don't have an invite,{" "}
-            <a
-              onClick={createNewRoom}
-              href="#"
-              className="text-blue-500 hover:underline cursor-pointer"
-            >
-              create a new room
-            </a>
-          </span>
-        </div>
-      </div>
+return (
+  <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white relative overflow-hidden">
+    {/* Floating Gradient Blur Effect */}
+    <div className="absolute inset-0">
+      <div className="absolute w-96 h-96 bg-blue-500 opacity-30 rounded-full filter blur-3xl top-20 left-10 animate-pulse"></div>
+      <div className="absolute w-80 h-80 bg-purple-500 opacity-30 rounded-full filter blur-3xl bottom-10 right-20 animate-pulse"></div>
     </div>
-  );
+
+    {/* Join Room Card */}
+    <motion.div
+      className="bg-gray-950 p-8 rounded-2xl shadow-2xl w-96 text-center z-10 border border-gray-700"
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <img className="w-24 mx-auto mb-4" src="Logo.PNG" alt="logo" />
+      <h4 className="text-2xl font-semibold mb-6 text-blue-400">
+        Enter ROOM ID to Join
+      </h4>
+
+      <div className="space-y-4">
+        <input
+          type="text"
+          className="w-full p-3 border border-gray-700 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+          placeholder="ROOM ID"
+          onChange={(e) => setRoomId(e.target.value)}
+          value={roomId}
+          disabled={loading}
+        />
+        <input
+          type="text"
+          className="w-full p-3 border border-gray-700 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+          placeholder="USERNAME"
+          onChange={(e) => setUsername(e.target.value)}
+          value={username}
+          disabled={loading}
+        />
+        <motion.button
+          className="w-full bg-blue-500 text-white p-3 rounded-md font-semibold hover:bg-blue-400 transition-all shadow-md disabled:bg-gray-600"
+          onClick={joinRoom}
+          disabled={loading}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          {loading ? "Processing..." : "Request to Join"}
+        </motion.button>
+
+        {isTimerActive && (
+          <div className="mt-4">
+            <p className="text-sm text-gray-400 font-semibold">
+              Request expires in {Math.floor(timer / 60)}:
+              {(timer % 60).toString().padStart(2, "0")} minutes
+            </p>
+            <div className="relative w-full h-2 bg-gray-700 rounded-full overflow-hidden mt-2">
+              <div
+                className="absolute left-0 top-0 h-full bg-blue-500"
+                style={{ width: `${(timer / 120) * 100}%` }}
+              ></div>
+            </div>
+          </div>
+        )}
+
+        <span className="block text-sm text-gray-400 mt-4">
+          Don't have an invite? &nbsp;
+          <a
+            onClick={createNewRoom}
+            href="#"
+            className="text-blue-400 hover:underline cursor-pointer"
+          >
+            Create a new room
+          </a>
+        </span>
+      </div>
+    </motion.div>
+
+    {/* Animated Wave Effect */}
+    <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-gray-900 via-black to-transparent"></div>
+
+    {/* Footer */}
+    <footer className="absolute bottom-5 text-gray-400 text-sm z-10">
+      <p>&copy; 2025 CodeIt. All rights reserved.</p>
+    </footer>
+  </div>
+);
 };
 
 export default Home;
