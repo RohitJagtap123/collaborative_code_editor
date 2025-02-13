@@ -17,6 +17,7 @@
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
     "codemirror": "^5.65.18",
+    "concurrently": "^9.1.2",
     "cookie-parser": "^1.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
@@ -38,10 +39,11 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "server:dev": "nodemon server.js",
+    "server": "nodemon server.js",
     "server:prod": "node server.js",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev": "concurrently -n \"client,server\" -c \"bgBlue,bgYellow\" \"npm run start\" \"npm run server\""
   },
   "eslintConfig": {
     "extends": [
