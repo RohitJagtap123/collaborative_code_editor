@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Login from './pages/LogIn';
 import SignUp from './pages/SignUp';
 import ApproveAccess from './pages/ApproveAccess';
+import Landing from './pages/Landing';
 
 function App() {
   return (
@@ -13,7 +14,8 @@ function App() {
      <Toaster position="top-right" reverseOrder={false} />
      <BrowserRouter>
          <Routes>
-             <Route path="/" element={<Login/>}></Route>
+             <Route path="/" element={<Landing/>}></Route>
+            <Route path="/login" element={<Login/>}></Route>
             <Route path="/signup" element={<SignUp/>}></Route>
             <Route path="/dashboard" element={<Home/>}></Route>
              <Route path="/editor/:roomId" element={<EditorPage/>}></Route>
