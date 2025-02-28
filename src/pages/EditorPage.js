@@ -4,6 +4,7 @@ import "../App.css";
 import ACTIONS from "../Actions";
 import Client from "../components/Client";
 import Editor from "../components/Editor";
+import Canvas from "../components/Canvas";
 import { initSocket } from "../socket";
 import {
   useLocation,
@@ -26,6 +27,7 @@ const EditorPage = () => {
   const [output, setOutput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isOutputAreaVisible, setIsOutputAreaVisible] = useState(false);
+  const [isCanvasOpen, setCanvasOpen] = useState(false); // State for drawing board
 
   // Mapping for Judge0 language IDs
   const languageMapping = {
@@ -165,6 +167,8 @@ const EditorPage = () => {
     return <Navigate to="/dashboard" />;
   }
 
+  
+
     return (
         <div className="mainWrap">
             <div className="aside">
@@ -256,6 +260,17 @@ const EditorPage = () => {
           )}
         </div>
       )}
+      <div className="">
+        <button
+          className="runBtn"
+          onClick={() => setCanvasOpen((prev) => !prev)} // Ensure toggle logic works
+          style={{ position: "absolute", right: "80px", top: "10px" }}
+        >
+          {isCanvasOpen ? "Close Board" : "Open Board"}
+        </button>
+      </div>
+      {isCanvasOpen && <Canvas socketRef={socketRef} roomId={roomId} />}{" "}
+      {/* Rendering canvas */}
     </div>
   );
 };
