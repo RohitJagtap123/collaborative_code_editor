@@ -169,67 +169,73 @@ const EditorPage = () => {
 
   
 
-    return (
-        <div className="mainWrap">
-            <div className="aside">
-                <div className="asideInner">
-                    <div className="logo">
-                        {/* <img className="logoImage" src="/Logo.PNG" alt="logo" /> */}
-                        <h3>Lets's Code</h3>
-                    </div>
-                    <h3>Connected</h3>
-                    <div className="clientsList">
-                        {clients.map((client) => (
-                            <Client key={client.socketId} username={client.username} />
-                        ))}
-                    </div>
-                </div>
-                <button className="copybtn" onClick={() => navigator.clipboard.writeText(roomId)}>
-                    Copy ROOM ID
-                </button>
-                <button className="leavebtn" onClick={() => reactNavigator('/dashboard')}>
-                    Leave
-                </button>
-            </div>
-            <div className="editorWrap">
-                <Editor
-                    socketRef={socketRef}
-                    roomId={roomId}
-                    onCodeChange={(code) => {
-                        codeRef.current = code;
-                    }}
-                />
-                <button
-                    className="runBtn"
-                    onClick={() => setTerminalOpen(!isTerminalOpen)}
-                    style={{ position: 'absolute', right: '10px', top: '10px' }}
-                >
-                    Run
-                </button>
-            </div>
-            {isTerminalOpen && (
-                <div className="terminal" ref={terminalRef}>
-                    <h3>Run Code</h3>
-                    <select
-                        value={language}
-                        onChange={(e) => setLanguage(e.target.value)}
-                        className="languageSelector"
-                    >
-                        <option value="">Select Language</option>
-                        <option value="cpp">C++</option>
-                        <option value="javascript">JavaScript</option>
-                        <option value="python">Python</option>
-                        <option value="java">Java</option>
-                    </select>
-                    <textarea
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        placeholder="Enter input"
-                        className="inputArea"
-                    ></textarea>
-                    <button onClick={runCode} disabled={isLoading} className="executeBtn">
-                        {isLoading? 'Executing...' :'Execute'}
-                    </button>
+  return (
+    <div className="mainWrap">
+      <div className="aside">
+        <div className="asideInner">
+          <div className="logo">
+            {/* <img className="logoImage" src="/Logo.PNG" alt="logo" /> */}
+            <h3>Lets's Code</h3>
+          </div>
+          <h3>Connected</h3>
+          <div className="clientsList">
+            {clients.map((client) => (
+              <Client key={client.socketId} username={client.username} />
+            ))}
+          </div>
+        </div>
+        <button
+          className="copybtn"
+          onClick={() => navigator.clipboard.writeText(roomId)}
+        >
+          Copy ROOM ID
+        </button>
+        <button
+          className="leavebtn"
+          onClick={() => reactNavigator("/dashboard")}
+        >
+          Leave
+        </button>
+      </div>
+      <div className="editorWrap">
+        <Editor
+          socketRef={socketRef}
+          roomId={roomId}
+          onCodeChange={(code) => {
+            codeRef.current = code;
+          }}
+        />
+        <button
+          className="runBtn"
+          onClick={() => setTerminalOpen(!isTerminalOpen)}
+          style={{ position: "absolute", right: "10px", top: "10px" }}
+        >
+          Run
+        </button>
+      </div>
+      {isTerminalOpen && (
+        <div className="terminal" ref={terminalRef}>
+          <h3>Run Code</h3>
+          <select
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+            className="languageSelector"
+          >
+            <option value="">Select Language</option>
+            <option value="cpp">C++</option>
+            <option value="javascript">JavaScript</option>
+            <option value="python">Python</option>
+            <option value="java">Java</option>
+          </select>
+          <textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Enter input"
+            className="inputArea"
+          ></textarea>
+          <button onClick={runCode} disabled={isLoading} className="executeBtn">
+            {isLoading ? "Executing..." : "Execute"}
+          </button>
 
           {/* {isLoading ?(
                         <div className="spinner"></div>
