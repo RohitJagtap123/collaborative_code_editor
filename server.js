@@ -15,12 +15,14 @@ const axios = require("axios");
 const cors = require("cors");
 require("dotenv").config();
 
+const frontend = process.env.FRONTEND_URL;
+
 
 // Middleware
 
 app.use(
   cors({
-    origin: "http://localhost:3000", // Your frontend URL
+    origin: frontend, // Your frontend URL
     credentials: true, // Allow credentials (cookies)
   })
 );
@@ -95,7 +97,7 @@ io.on('connection', (socket) => {
 
 
 
-const PORT = process.env.PORT || 5000;
+const PORT = 5001;
 server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 
 module.exports = { io };

@@ -32,10 +32,11 @@ const Home = () => {
   const createNewRoom = async (e) => {
     e.preventDefault();
     try {
+      const BACKEND = process.env.REACT_APP_BASE_URL;
       const id = uuidV4();
       setLoading(true);
       const response = await axios.post(
-        "http://localhost:5001/api/createRoom",
+        `${BACKEND}/api/createRoom`,
         { id, owner: username }
       );
 
@@ -69,8 +70,9 @@ const Home = () => {
       // Step 1: Check if the user is the owner or already approved
       let checkResponse;
       try {
+        const BACKEND = process.env.REACT_APP_BASE_URL;
         checkResponse = await axios.get(
-          `http://localhost:5001/api/checkUserRole?roomId=${roomId}&username=${username}`,
+          `${BACKEND}/api/checkUserRole?roomId=${roomId}&username=${username}`,
           { withCredentials: true }
         );
       } catch (error) {
@@ -97,8 +99,9 @@ const Home = () => {
 
       let response;
       try {
+        const BACKEND = process.env.REACT_APP_BASE_URL;
         response = await axios.post(
-          "http://localhost:5001/api/requestAccess",
+          `${BACKEND}/api/requestAccess`,
           { roomId, username },
           { withCredentials: true }
         );
@@ -126,8 +129,9 @@ const Home = () => {
 
           let statusResponse;
           try {
+            const BACKEND = process.env.REACT_APP_BASE_URL;
             statusResponse = await axios.get(
-              `http://localhost:5001/api/check-access?roomId=${roomId}&username=${username}`,
+              `${BACKEND}/api/check-access?roomId=${roomId}&username=${username}`,
               { withCredentials: true }
             );
           } catch (error) {

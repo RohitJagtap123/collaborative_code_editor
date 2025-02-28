@@ -113,7 +113,8 @@ const EditorPage = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5001/api/run-code", {
+      const BACKEND = process.env.REACT_APP_BASE_URL;
+      const response = await fetch(`${BACKEND}/api/run-code`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -145,8 +146,9 @@ const EditorPage = () => {
     // setIsOutputAreaVisible(true);
 
     try {
+      const BACKEND = process.env.REACT_APP_BASE_URL;
       const response = await fetch(
-        `http://localhost:5001/api/get-output/${token}`
+        `${BACKEND}/api/get-output/${token}`
       );
       const data = await response.json();
       if (data.status === "Processing") {

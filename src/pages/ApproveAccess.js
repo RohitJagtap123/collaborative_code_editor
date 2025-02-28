@@ -25,8 +25,9 @@ const ApproveAccess = () => {
       }
 
       try {
+        const BACKEND = process.env.REACT_APP_BASE_URL;
         const response = await axios.post(
-          "http://localhost:5001/api/approveAccess",
+          `${BACKEND}/api/approveAccess`,
           {
             roomId,
             email,

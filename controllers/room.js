@@ -75,10 +75,11 @@ const requestAccess = async (req, res) => {
         await room.save();
         console.log("Added to DB");
     }
-
+    const FRONTEND = process.env.FRONTEND_URL;
+    
     // Generate approval link
-    const approvalLink = `http://localhost:3000/approve-access?roomId=${roomId}&email=${email}&approve=true`;
-    const rejectionLink = `http://localhost:3000/approve-access?roomId=${roomId}&email=${email}&approve=false`;
+    const approvalLink = `${FRONTEND}/approve-access?roomId=${roomId}&email=${email}&approve=true`;
+    const rejectionLink = `${FRONTEND}/approve-access?roomId=${roomId}&email=${email}&approve=false`;
 
     // Send email to room owner
     const transporter = nodemailer.createTransport({
