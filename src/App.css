@@ -348,3 +348,77 @@ line-height: 1.6;
     100% { transform: rotate(360deg); }
 }
 
+.mainContainer {
+    display: flex;
+    height: 100vh;
+}
+
+.contentWrap {
+    display: flex;
+    flex-grow: 1;
+}
+
+.editorSection {
+    flex: 1;
+    padding: 10px;
+}
+
+.sidebar {
+    width: 250px;
+    background: #1e1e1e;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
+
+.sidebarHeader {
+    display: flex;
+    gap: 5px;
+}
+
+.sidebarHeader button {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.sidebarHeader button:hover {
+    background: #444;
+}
+
+.sidebarContent {
+    margin-top: 10px;
+    width: 100%;
+}
+
+.fileUpload input {
+    width: 100%;
+}
+
+.chatBox {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.chatBox .messages {
+    height: 150px;
+    overflow-y: auto;
+    background: #2a2a2a;
+    padding: 5px;
+}
+
+.chatBox input {
+    padding: 5px;
+    width: 100%;
+}
+
+.drawingCanvas {
+    border: 1px solid white;
+    background: #fff;
+}
+
