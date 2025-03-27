@@ -62,7 +62,7 @@ const ApproveAccess = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-md text-center">
-        <h2 className="text-xl font-semibold">
+        <h2 className="text-xl text-black font-semibold">
           {loading ? "Processing..." : message}
         </h2>
       </div>

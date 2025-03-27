@@ -16,30 +16,40 @@ function UsersView() {
     const { socket } = useSocket()
 
     const copyURL = async () => {
-        const url = window.location.href
+        const urlParts = window.location.pathname.split("/"); // Split URL path by "/"
+        const roomId = urlParts[urlParts.length - 1];
         try {
-            await navigator.clipboard.writeText(url)
-            toast.success("URL copied to clipboard")
+            await navigator.clipboard.writeText(roomId)
+            toast.success("Room ID copied to clipboard")
         } catch (error) {
-            toast.error("Unable to copy URL to clipboard")
+            toast.error("Unable to copy Room ID to clipboard")
             console.log(error)
         }
     }
 
     const shareURL = async () => {
-        const url = window.location.href
-        try {
-            await navigator.share({ url })
-        } catch (error) {
-            toast.error("Unable to share URL")
-            console.log(error)
-        }
+    if (!navigator.share) {
+        toast.error("Web Share API is not supported in this browser.");
+        return;
     }
+
+    try {
+        await navigator.share({
+            title: "Check this out!",
+            text: "Hey, take a look at this link!",
+            url: window.location.href,
+        });
+    } catch (error) {
+        toast.error("Unable to share URL");
+        console.log(error);
+    }
+};
+
 
     const leaveRoom = () => {
         socket.disconnect()
         setStatus(USER_STATUS.DISCONNECTED)
-        navigate("/", {
+        navigate("/dashboard", {
             replace: true,
         })
     }

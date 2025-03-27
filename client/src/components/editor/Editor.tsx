@@ -16,7 +16,7 @@ import CodeMirror, {
     scrollPastEnd,
 } from "@uiw/react-codemirror"
 import { useEffect, useMemo, useState } from "react"
-import toast from "react-hot-toast"
+// import toast from "react-hot-toast"
 import { cursorTooltipBaseTheme, tooltipField } from "./tooltip"
 
 function Editor() {
@@ -66,14 +66,15 @@ function Editor() {
         const langExt = loadLanguage(language.toLowerCase() as LanguageName)
         if (langExt) {
             extensions.push(langExt)
-        } else {
-            toast.error(
-                "Syntax highlighting is unavailable for this language. Please adjust the editor settings; it may be listed under a different name.",
-                {
-                    duration: 5000,
-                },
-            )
         }
+        // } else {
+        //     toast.error(
+        //         "Syntax highlighting is unavailable for this language. Please adjust the editor settings; it may be listed under a different name.",
+        //         {
+        //             duration: 5000,
+        //         },
+        //     )
+        // }
 
         setExtensions(extensions)
     }, [filteredUsers, language])
