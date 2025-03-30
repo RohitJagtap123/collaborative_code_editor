@@ -106,7 +106,17 @@ const Login = () => {
             {loading ? "Logging in..." : "Log In"}
           </motion.button>
 
-          <p className="text-sm text-gray-400">
+          <p className="text-10px text-gray-400">
+            Forgot Password
+            <a
+              href="/forgot-password"
+              className="text-blue-400 hover:underline hover:text-blue-300"
+            >
+              &nbsp;Click Here
+            </a>
+          </p>
+
+          <p className="text-10px text-gray-400">
             Don't have an account? &nbsp;
             <a
               href="/signup"

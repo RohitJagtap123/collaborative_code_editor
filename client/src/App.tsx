@@ -6,6 +6,8 @@ import Landing from "./pages/LandingPage"
 import Login from "./pages/LoginPage"
 import SignUp from "./pages/SignupPage"
 import ApproveAccess from "./pages/ApproveAccess"
+import ForgotPassword from "./pages/ForgotPassword"
+import UpdatePassword from "./pages/UpdatePassword"
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
             <Route path="/dashboard" element={<Home/>}></Route>
              <Route path="/editor/:roomId" element={<EditorPage/>}></Route>
              <Route path="/approve-access" element={<ApproveAccess/>}></Route>
+             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/update-password/:id" element={<UpdatePassword />} />
          </Routes>
      </BrowserRouter>
      </div>
