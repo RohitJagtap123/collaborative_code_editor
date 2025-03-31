@@ -4,6 +4,8 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
+import { useGoogleLogin } from "@react-oauth/google";
+import GoogleLogo from "../assets/GoogleLogo.png";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,41 +16,65 @@ const Login = () => {
 
   const handleLogin = async () => {
     if (!email || !password) {
-        toast.error("All fields are required!");
-        return;
+      toast.error("All fields are required!");
+      return;
     }
 
     setLoading(true);
 
     try {
-        const BACKEND = import.meta.env.VITE_BACKEND_URL;
-        const response = await axios.post(`${BACKEND}/api/login`, {
-            email,
-            password
-        });
+      const BACKEND = import.meta.env.VITE_BACKEND_URL;
+      const response = await axios.post(`${BACKEND}/api/login`, {
+        email,
+        password,
+      });
 
-        if (response.data.success) {
-            localStorage.setItem("token", response.data.token);
-            toast.success("Logged In Successfully!");
-            navigate("/dashboard");
-        } else {
-            toast.error(response.data.message);
-        }
+      if (response.data.success) {
+        localStorage.setItem("token", response.data.token);
+        toast.success("Logged In Successfully!");
+        navigate("/dashboard");
+      } else {
+        toast.error(response.data.message);
+      }
     } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-            toast.error(error.response?.data?.message || "Login failed!");
-        }
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message || "Login failed!");
+      }
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-};
+  };
 
-
-  const handleInputEnter = (e: { code: string; }) => {
+  const handleInputEnter = (e: { code: string }) => {
     if (e.code === "Enter") {
       handleLogin();
     }
   };
+
+  // 🔹 Google Login Handler
+  const googleLogin = useGoogleLogin({
+  onSuccess: async (response) => {
+    try {
+      // 🔹 Send only access_token to backend
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/google`, {
+        token: response.access_token,
+      });
+
+      if (res.data.success) {
+        localStorage.setItem("token", res.data.token);
+        toast.success("Logged in with Google!");
+        navigate("/dashboard");
+      } else {
+        toast.error("Google login failed!");
+      }
+    } catch (error) {
+      toast.error("Google Authentication Error!");
+    }
+  },
+  onError: () => toast.error("Google Sign-In Failed!"),
+});
+
+
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white relative overflow-hidden">
@@ -106,8 +132,23 @@ const Login = () => {
             {loading ? "Logging in..." : "Log In"}
           </motion.button>
 
-          <p className="text-10px text-gray-400">
-            Forgot Password
+          {/* 🔹 Google Sign-In Button */}
+          <motion.button
+            className="w-full flex items-center justify-center gap-3 bg-white text-black p-3 rounded-md font-semibold shadow-md hover:bg-gray-200 transition-all border border-gray-300 mt-2"
+            onClick={() => googleLogin()}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <img
+              src={GoogleLogo}
+              alt="Google Logo"
+              className="w-5 h-5"
+            />
+            <span>Continue with Google</span>
+          </motion.button>
+
+          <p className="text-sm text-gray-400 mt-3">
+            Forgot Password?
             <a
               href="/forgot-password"
               className="text-blue-400 hover:underline hover:text-blue-300"
@@ -116,7 +157,7 @@ const Login = () => {
             </a>
           </p>
 
-          <p className="text-10px text-gray-400">
+          <p className="text-sm text-gray-400">
             Don't have an account? &nbsp;
             <a
               href="/signup"

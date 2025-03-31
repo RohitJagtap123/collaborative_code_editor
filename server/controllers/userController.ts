@@ -6,8 +6,11 @@ import userModel from "../models/userModel";
 import OTP from "../models/OTP"
 const otpGenerator = require("otp-generator");
 import dotenv from "dotenv";
+import { OAuth2Client } from "google-auth-library";
+import axios from "axios";
 
 dotenv.config();
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const createToken = (id: string, email: string): string => {
   return jwt.sign({ userId: id, email }, process.env.JWT_SECRET as string, {
@@ -168,4 +171,44 @@ export const sendotp = async (req: Request, res:Response) => {
     return res.status(500).json({ success: false, error: error });
   }
 };
+
+export const googlelogin = async (req: Request, res:Response) => {
+  console.log("Inside Google Login");
+  try {
+    const { token } = req.body;
+    if (!token) {
+      return res.status(400).json({ success: false, message: "Token is required" });
+    }
+
+    // 🔹 Fetch Google User Info from Backend (to bypass CORS)
+    const googleRes = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    const { email, name } = googleRes.data;
+
+    // 🔹 Check if user exists in DB
+    let user = await userModel.findOne({ email });
+    if (!user) {
+      user = new userModel({ name, email, googleAuth: true });
+      await user.save();
+    }
+
+    // 🔹 Generate JWT Token for session
+    const appToken = jwt.sign({ userId: user._id, email }, process.env.JWT_SECRET as string, { expiresIn: "7d" });
+
+    res.cookie("token", appToken, {
+      httpOnly: true,
+      // secure: process.env.NODE_ENV === "production",
+      // sameSite: "Strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
+    res.json({ success: true, token: appToken, user });
+  } catch (error) {
+    console.error("Google Auth Error:", error);
+    res.status(500).json({ success: false, message: "Google Authentication Failed" });
+  }
+};
+
 
