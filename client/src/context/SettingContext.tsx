@@ -25,7 +25,7 @@ export const useSettings = (): SettingsContextType => {
 
 const defaultSettings: Settings = {
     theme: "Dracula",
-    language: "Javascript",
+    language: "Cpp",
     fontSize: 16,
     fontFamily: "Space Mono",
     showGitHubCorner: true,
