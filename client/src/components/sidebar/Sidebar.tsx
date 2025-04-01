@@ -53,7 +53,8 @@ function Sidebar() {
                     },
                 )}
             >
-                <div className="flex gap-3 md:flex-col md:gap-2">
+                {/* Modified buttons container with horizontal scroll */}
+                <div className="flex flex-1 gap-3 overflow-x-auto md:flex-col md:gap-2 flex-nowrap md:overflow-visible">
                     <SidebarButton
                         viewName={VIEWS.FILES}
                         icon={viewIcons[VIEWS.FILES]}
@@ -81,7 +82,7 @@ function Sidebar() {
                 </div>
 
                 {/* Activity State Toggle */}
-                <div className="flex h-fit items-center justify-center md:mt-auto">
+                <div className="flex h-fit items-center justify-center md:mt-auto mt-[-10px]">
                     <button
                         className={cn(
                             "flex items-center justify-center rounded-lg p-2 transition-all",
