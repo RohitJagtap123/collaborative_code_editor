@@ -76,30 +76,30 @@ const Login = () => {
 
 
 
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white relative overflow-hidden">
-      {/* Floating Gradient Blur Effect */}
+   return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white relative overflow-hidden px-4">
+      {/* Floating Gradient Blur Effect - Adjusted for mobile */}
       <div className="absolute inset-0">
-        <div className="absolute w-96 h-96 bg-blue-500 opacity-30 rounded-full filter blur-3xl top-20 left-10 animate-pulse"></div>
-        <div className="absolute w-80 h-80 bg-purple-500 opacity-30 rounded-full filter blur-3xl bottom-10 right-20 animate-pulse"></div>
+        <div className="absolute w-64 h-64 md:w-96 md:h-96 bg-blue-500 opacity-30 rounded-full filter blur-3xl top-20 left-4 md:left-10 animate-pulse"></div>
+        <div className="absolute w-56 h-56 md:w-80 md:h-80 bg-purple-500 opacity-30 rounded-full filter blur-3xl bottom-10 right-4 md:right-20 animate-pulse"></div>
       </div>
 
-      {/* Login Card */}
+      {/* Login Card - Responsive adjustments */}
       <motion.div
-        className="bg-gray-950 p-8 rounded-2xl shadow-2xl w-96 text-center z-10 border border-gray-700"
+        className="bg-gray-950 p-6 md:p-8 rounded-2xl shadow-2xl w-full max-w-md md:w-96 text-center z-10 border border-gray-700"
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <img className="w-24 mx-auto mb-4" src="Logo.PNG" alt="App Logo" />
-        <h4 className="text-2xl font-semibold mb-6 text-blue-400">
+        <img className="w-20 md:w-24 mx-auto mb-4" src="Logo.PNG" alt="App Logo" />
+        <h4 className="text-xl md:text-2xl font-semibold mb-6 text-blue-400">
           Login to Your Account
         </h4>
 
-        <div className="space-y-5">
+        <div className="space-y-4 md:space-y-5">
           <input
             type="email"
-            className="w-full p-3 border border-gray-700 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full p-2 md:p-3 text-sm md:text-base border border-gray-700 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
             placeholder="Enter Your Email"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
@@ -108,7 +108,7 @@ const Login = () => {
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
-              className="w-full p-3 border border-gray-700 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full p-2 md:p-3 text-sm md:text-base border border-gray-700 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
               placeholder="Enter Your Password"
               onChange={(e) => setPassword(e.target.value)}
               value={password}
@@ -116,14 +116,15 @@ const Login = () => {
             />
             <span
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-3 cursor-pointer text-gray-400"
+              className="absolute right-3 top-2.5 md:top-3 cursor-pointer text-gray-400"
             >
-              {showPassword ? <EyeOff /> : <Eye />}
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </span>
           </div>
 
+          {/* Buttons - Adjusted padding for mobile */}
           <motion.button
-            className="w-full bg-blue-500 text-white p-3 rounded-md font-semibold hover:bg-blue-400 transition-all shadow-md disabled:bg-gray-600"
+            className="w-full bg-blue-500 text-white p-2 md:p-3 rounded-md text-sm md:text-base font-semibold hover:bg-blue-400 transition-all shadow-md disabled:bg-gray-600"
             onClick={handleLogin}
             disabled={loading}
             whileHover={{ scale: 1.05 }}
@@ -132,9 +133,9 @@ const Login = () => {
             {loading ? "Logging in..." : "Log In"}
           </motion.button>
 
-          {/* 🔹 Google Sign-In Button */}
+          {/* Google Sign-In Button - Adjusted for mobile */}
           <motion.button
-            className="w-full flex items-center justify-center gap-3 bg-white text-black p-3 rounded-md font-semibold shadow-md hover:bg-gray-200 transition-all border border-gray-300 mt-2"
+            className="w-full flex items-center justify-center gap-2 bg-white text-black p-2 md:p-3 rounded-md text-sm md:text-base font-semibold shadow-md hover:bg-gray-200 transition-all border border-gray-300 mt-2"
             onClick={() => googleLogin()}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -142,23 +143,24 @@ const Login = () => {
             <img
               src={GoogleLogo}
               alt="Google Logo"
-              className="w-5 h-5"
+              className="w-4 h-4 md:w-5 md:h-5"
             />
             <span>Continue with Google</span>
           </motion.button>
 
-          <p className="text-sm text-gray-400 mt-3">
-            Forgot Password?
+          {/* Links - Text size adjustment */}
+          <p className="text-xs md:text-sm text-gray-400 mt-2">
+            Forgot Password?{" "}
             <a
               href="/forgot-password"
               className="text-blue-400 hover:underline hover:text-blue-300"
             >
-              &nbsp;Click Here
+              Click Here
             </a>
           </p>
 
-          <p className="text-sm text-gray-400">
-            Don't have an account? &nbsp;
+          <p className="text-xs md:text-sm text-gray-400">
+            Don't have an account?{" "}
             <a
               href="/signup"
               className="text-blue-400 hover:underline hover:text-blue-300"
@@ -169,11 +171,8 @@ const Login = () => {
         </div>
       </motion.div>
 
-      {/* Animated Wave Effect */}
-      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-gray-900 via-black to-transparent"></div>
-
-      {/* Footer */}
-      <footer className="absolute bottom-5 text-gray-400 text-sm z-10">
+      {/* Footer - Adjusted positioning */}
+      <footer className="absolute bottom-4 md:bottom-5 text-gray-400 text-xs md:text-sm z-10 text-center">
         <p>&copy; 2025 CodeIt. All rights reserved.</p>
       </footer>
     </div>

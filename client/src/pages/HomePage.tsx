@@ -172,31 +172,53 @@ const Home = () => {
       setLoading(false);
     }
   };
+  
+  const handleLogout = () => {
+    navigate("/");
+    sessionStorage.clear();
+    localStorage.clear();
+  };
 
 return (
-  <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white relative overflow-hidden">
+  <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white relative overflow-hidden px-4">
+    {/* Logout Button */}
+    <motion.div
+      className="absolute top-4 right-4 z-20"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <button
+        onClick={handleLogout}
+        disabled={loading}
+        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition-colors duration-200 text-sm font-medium shadow-lg disabled:bg-gray-600 disabled:cursor-not-allowed"
+      >
+        Logout
+      </button>
+    </motion.div>
+
     {/* Floating Gradient Blur Effect */}
     <div className="absolute inset-0">
-      <div className="absolute w-96 h-96 bg-blue-500 opacity-30 rounded-full filter blur-3xl top-20 left-10 animate-pulse"></div>
-      <div className="absolute w-80 h-80 bg-purple-500 opacity-30 rounded-full filter blur-3xl bottom-10 right-20 animate-pulse"></div>
+      <div className="absolute w-80 h-80 md:w-96 md:h-96 bg-blue-500 opacity-30 rounded-full filter blur-3xl top-10 left-5 md:top-20 md:left-10 animate-pulse"></div>
+      <div className="absolute w-64 h-64 md:w-80 md:h-80 bg-purple-500 opacity-30 rounded-full filter blur-3xl bottom-5 right-10 md:bottom-10 md:right-20 animate-pulse"></div>
     </div>
 
     {/* Join Room Card */}
     <motion.div
-      className="bg-gray-950 p-8 rounded-2xl shadow-2xl w-96 text-center z-10 border border-gray-700"
+      className="bg-gray-950 p-6 md:p-8 rounded-2xl shadow-2xl w-full max-w-md text-center z-10 border border-gray-700"
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <img className="w-24 mx-auto mb-4" src="Logo.PNG" alt="logo" />
-      <h4 className="text-2xl font-semibold mb-6 text-blue-400">
+      <img className="w-20 md:w-24 mx-auto mb-4" src="Logo.PNG" alt="logo" />
+      <h4 className="text-xl md:text-2xl font-semibold mb-6 text-blue-400">
         Enter ROOM ID to Join
       </h4>
 
       <div className="space-y-4">
         <input
           type="text"
-          className="w-full p-3 border border-gray-700 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full p-2 md:p-3 border border-gray-700 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
           placeholder="ROOM ID"
           onChange={(e) => setRoomId(e.target.value)}
           value={roomId}
@@ -204,14 +226,14 @@ return (
         />
         <input
           type="text"
-          className="w-full p-3 border border-gray-700 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full p-2 md:p-3 border border-gray-700 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
           placeholder="USERNAME"
           onChange={(e) => setUsername(e.target.value)}
           value={username}
           disabled={loading}
         />
         <motion.button
-          className="w-full bg-blue-500 text-white p-3 rounded-md font-semibold hover:bg-blue-400 transition-all shadow-md disabled:bg-gray-600"
+          className="w-full bg-blue-500 text-white p-2 md:p-3 rounded-md font-semibold hover:bg-blue-400 transition-all shadow-md disabled:bg-gray-600"
           onClick={joinRoom}
           disabled={loading}
           whileHover={{ scale: 1.05 }}
@@ -222,7 +244,7 @@ return (
 
         {isTimerActive && (
           <div className="mt-4">
-            <p className="text-sm text-gray-400 font-semibold">
+            <p className="text-xs md:text-sm text-gray-400 font-semibold">
               Request expires in {Math.floor(timer / 60)}:
               {(timer % 60).toString().padStart(2, "0")} minutes
             </p>
@@ -235,7 +257,7 @@ return (
           </div>
         )}
 
-        <span className="block text-sm text-gray-400 mt-4">
+        <span className="block text-xs md:text-sm text-gray-400 mt-4">
           Don't have an invite? &nbsp;
           <a
             onClick={createNewRoom}
@@ -249,10 +271,10 @@ return (
     </motion.div>
 
     {/* Animated Wave Effect */}
-    <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-gray-900 via-black to-transparent"></div>
+    <div className="absolute bottom-0 left-0 w-full h-20 md:h-32 bg-gradient-to-t from-gray-900 via-black to-transparent"></div>
 
     {/* Footer */}
-    <footer className="absolute bottom-5 text-gray-400 text-sm z-10">
+    <footer className="absolute bottom-4 md:bottom-5 text-gray-400 text-xs md:text-sm z-10">
       <p>&copy; 2025 CodeIt. All rights reserved.</p>
     </footer>
   </div>
