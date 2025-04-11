@@ -1,4 +1,4 @@
-import  { SetStateAction, useState } from "react";
+import  { SetStateAction, useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -18,7 +18,25 @@ function SignUpPage() {
   const [loading, setLoading] = useState(false); // Loading state
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(300);
   const navigate = useNavigate();
+
+  // Timer effect
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (step === 2 && timeLeft > 0) {
+      interval = setInterval(() => {
+        setTimeLeft((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [step, timeLeft]);
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
 
   // Handle input changes for Step 1
   const handleInputChange = (e: { target: { name: any; value: any; }; }) => {
@@ -29,6 +47,28 @@ function SignUpPage() {
   // Handle OTP input change for Step 2
   const handleOtpChange = (e: { target: { value: SetStateAction<string>; }; }) => {
     setOtp(e.target.value);
+  };
+
+  const handleResendOtp = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/sendotp`,
+        { email: formData.email }
+      );
+
+      if (res.data.success) {
+        setTimeLeft(300);
+        toast.success("New OTP sent to your email!");
+      } else {
+        throw new Error(res.data.message || "Failed to resend OTP.");
+      }
+    } catch (err) {
+      setError("Failed to resend OTP. Please try again.");
+      toast.error("Failed to resend OTP.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Step 1: Send OTP to the user's email
@@ -244,7 +284,6 @@ function SignUpPage() {
             </motion.button>
           </>
         ) : (
-          // Step 2: Verify OTP
           <>
             <div className="mb-6">
               <label
@@ -263,13 +302,30 @@ function SignUpPage() {
                 required
               />
             </div>
+
+            <div className="flex justify-between items-center mb-6">
+              <div className="text-sm text-gray-400">
+                OTP expires in:{" "}
+                <span className="font-semibold text-green-400">
+                  {formatTime(timeLeft)}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={handleResendOtp}
+                className={`text-sm text-green-400 hover:text-green-300 font-semibold`}
+              >
+                {loading ? "Sending..." : "Resend OTP"}
+              </button>
+            </div>
+
             <motion.button
               type="button"
               onClick={handleSignUp}
               className="w-full px-6 py-3 bg-green-500 text-white text-lg font-semibold rounded-lg shadow-lg hover:bg-green-400 transition-all border border-green-400 flex items-center justify-center"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              disabled={loading} // Disable button when loading
+              disabled={loading}
             >
               {loading ? (
                 <div className="flex items-center">
