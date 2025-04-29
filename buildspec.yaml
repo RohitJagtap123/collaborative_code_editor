@@ -1,0 +1,32 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo Installing frontend dependencies...
+      - cd client
+      - npm install
+      - cd ../server
+      - echo Installing backend dependencies...
+      - npm install
+      - cd ..
+
+  build:
+    commands:
+      - echo Building frontend...
+      - cd client
+      - npm run build
+      - cd ..
+      # Optionally, zip or move frontend build to server/public if serving React from Express
+
+artifacts:
+  files:
+    - client/build/**/*        # React build output
+    - server/**/*              # Include server files
+    - package.json
+    - appspec.yml
+    - scripts/**/*
+
+  discard-paths: no
